@@ -1,0 +1,54 @@
+# Build results
+bin/
+obj/
+out/
+
+# .NET dependencies
+*.exe
+*.dll
+*.pdb
+*.so
+*.dylib
+*.swp
+*.lock.json
+*.log
+
+# User-specific files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider / JetBrains / Resharper
+*.DotSettings
+.idea/
+*.sln.iml
+
+# Logs and Debugging
+logs/
+*.log
+*.tlog
+*.DS_Store
+thumbs.db
+
+# Coverage / Test Results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Publish / Deployment
+publish/
+node_modules/
+wwwroot/lib/
+.env
+.env.*
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# EF Core Migrations
+Migrations/

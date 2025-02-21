@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    image: singledatabase:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__StoreDbConnection=Server=db;Database=StoreDb;User=sa;Password=Password123;
+    ports:
+      - "5001:80"
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
