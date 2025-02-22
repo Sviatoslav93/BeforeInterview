@@ -1,4 +1,0 @@
-@SingleDataBase_HostAddress = http://localhost:5216
-
-GET {{SingleDataBase_HostAddress}}/api/stores?pageNumber=1&pageSize=10
-X-StoreCode: code001

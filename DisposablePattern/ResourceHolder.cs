@@ -15,7 +15,7 @@ public sealed class ResourceHolder(string filePath) : IDisposable
             ? throw new ObjectDisposedException(nameof(ResourceHolder))
             : _streamReader.ReadToEnd();
     }
-    
+
     ~ResourceHolder()
     {
         Dispose(false);

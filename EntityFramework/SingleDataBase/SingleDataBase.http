@@ -1,0 +1,19 @@
+@SingleDataBase_HostAddress = http://localhost:5216
+
+### Get stores
+GET {{SingleDataBase_HostAddress}}/api/stores?pageNumber=1&pageSize=10
+X-StoreCode: happyPets
+
+### Get store info
+GET {{SingleDataBase_HostAddress}}/api/stores/2
+X-StoreCode: happyPets2
+
+###
+POST {{SingleDataBase_HostAddress}}/api/stores
+Content-Type: application/json
+
+{
+  "name": "HappyPats",
+  "address": "123 Fake Street, Faketown, FK 12345",
+  "code": "happyPets"
+}
