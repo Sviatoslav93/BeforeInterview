@@ -24,7 +24,6 @@ public class LoginHandler(StoreDbContext db) : IRequestHandler<LoginRequest, Res
             {
                 Id = user.Id.ToString(),
                 Email = user.Email,
-                StoreCodes = string.Join(",", user.Stores.Select(x => x.StoreCode))
             };
         }
 

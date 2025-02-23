@@ -9,7 +9,6 @@ public class ListStoreHandler(StoreDbContext context) : IRequestHandler<ListStor
     public Task<List<StoreView>> Handle(ListStoresRequest request, CancellationToken cancellationToken)
     {
         return context.Stores
-            .Where(s => s.UserId == request.UserId)
             .Select(s => new StoreView
             {
                 StoreCode = s.StoreCode,

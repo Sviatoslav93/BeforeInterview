@@ -63,7 +63,6 @@ public static class AuthEndpoints
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim("store-codes", user.StoreCodes)
         };
 
         var token = new JwtSecurityToken(

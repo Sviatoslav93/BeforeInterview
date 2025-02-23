@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using SingleDataBase.Services.Abstractions;
 
 namespace SingleDataBase.Services;
@@ -15,7 +16,7 @@ public class CurrentUserProvider(IHttpContextAccessor httpContextAccessor) : ICu
     public Guid GetUserId()
     {
         var context = httpContextAccessor.HttpContext;
-        var id = (context?.User.Claims.FirstOrDefault(x => x.Type.Equals(JwtRegisteredClaimNames.Sub))?.Value)
+        var id = (context?.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.NameIdentifier))?.Value)
              ?? throw new InvalidOperationException("User id not found in claims");
         return Guid.Parse(id);
     }
