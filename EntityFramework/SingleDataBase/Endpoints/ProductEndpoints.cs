@@ -28,7 +28,7 @@ public static class ProductEndpoints
         })
         .WithName("GetProducts")
         .WithDescription("Retrieves all products for the current store")
-        .Produces<IEnumerable<object>>(StatusCodes.Status200OK)
+        .Produces<IEnumerable<ProductView>>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status401Unauthorized)
         .ProducesProblem(StatusCodes.Status400BadRequest);
 
@@ -45,7 +45,7 @@ public static class ProductEndpoints
         })
         .WithName("CreateProduct")
         .WithDescription("Creates a new product for the current store")
-        .Produces<object>(StatusCodes.Status201Created)
+        .Produces<int>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status401Unauthorized)
         .ProducesProblem(StatusCodes.Status400BadRequest);
     }

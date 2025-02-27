@@ -19,14 +19,16 @@ public static class DealsEndpoints
         group.WithStoreCode();
         group.RequireAuthorization();
 
-        group.MapGet("", async (IMediator mediator) =>
+        group.MapGet("", async (
+            [AsParameters] ListDealsRequest listDealsRequest,
+            IMediator mediator) =>
         {
-            var deals = await mediator.Send(new ListDealsRequest());
+            var deals = await mediator.Send(listDealsRequest);
             return Results.Ok(deals);
         })
         .WithName("GetDeals")
         .WithDescription("Retrieves all deals for the current store")
-        .Produces<IEnumerable<object>>(StatusCodes.Status200OK)
+        .Produces<IEnumerable<DealView>>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status401Unauthorized)
         .ProducesProblem(StatusCodes.Status400BadRequest);
 
@@ -39,7 +41,7 @@ public static class DealsEndpoints
         })
         .WithName("CreateDeal")
         .WithDescription("Creates a new deal for the current store")
-        .Produces<object>(StatusCodes.Status201Created)
+        .Produces<int>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status401Unauthorized)
         .ProducesProblem(StatusCodes.Status400BadRequest);
     }

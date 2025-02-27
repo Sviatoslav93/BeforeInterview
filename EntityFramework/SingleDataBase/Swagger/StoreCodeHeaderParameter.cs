@@ -18,11 +18,15 @@ namespace SingleDataBase.Swagger
                 return;
             }
 
+            if (operation.Parameters.Any(p => p.Name == "X-StoreCode"))
+            {
+                return;
+            }
+
             operation.Parameters.Add(new OpenApiParameter
             {
                 Name = "X-StoreCode",
                 In = ParameterLocation.Header,
-                Required = true,
                 Schema = new OpenApiSchema
                 {
                     Type = "String"
