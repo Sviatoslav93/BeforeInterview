@@ -7,8 +7,8 @@ namespace SingleDataBase.Database;
 
 public class StoreDbContext(DbContextOptions options) : DbContext(options)
 {
-    private readonly IStoreCodeProvider _storeCodeProvider;
-    private readonly ICurrentUserProvider _currentUserProvider;
+    private readonly IStoreCodeProvider _storeCodeProvider = null!;
+    private readonly ICurrentUserProvider _currentUserProvider = null!;
 
     public StoreDbContext(DbContextOptions options, IStoreCodeProvider storeCodeProvider, ICurrentUserProvider currentUserProvider)
         : this(options)
@@ -29,12 +29,12 @@ public class StoreDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(StoreConfiguration).Assembly);
 
         modelBuilder.Entity<Store>()
-            .HasQueryFilter(x => x.UserId == _currentUserProvider.GetUserId());
+            .HasQueryFilter(x => x.UserId == _currentUserProvider.UserId);
 
         modelBuilder.Entity<Deal>()
-            .HasQueryFilter(x => x.StoreCode == _storeCodeProvider.GetCurrentStoreCode());
+            .HasQueryFilter(x => x.StoreCode == _storeCodeProvider.StoreCode);
 
         modelBuilder.Entity<Product>()
-            .HasQueryFilter(x => x.StoreCode == _storeCodeProvider.GetCurrentStoreCode());
+            .HasQueryFilter(x => x.StoreCode == _storeCodeProvider.StoreCode);
     }
 }

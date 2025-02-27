@@ -2,5 +2,5 @@ namespace SingleDataBase.Services.Abstractions;
 
 public interface IStoreCodeProvider
 {
-    Guid GetCurrentStoreCode();
+    Guid StoreCode { get; }
 }

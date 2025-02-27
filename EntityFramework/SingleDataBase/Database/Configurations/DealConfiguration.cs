@@ -19,7 +19,7 @@ public class DealConfiguration : IEntityTypeConfiguration<Deal>
             .WithMany()
             .HasForeignKey(x => x.StoreCode)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsMany(x => x.Products, p =>
         {

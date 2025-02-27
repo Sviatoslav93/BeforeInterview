@@ -16,7 +16,7 @@ public static class AuthEndpoints
 
     public static void MapLoginEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("login", async (
+        app.MapPost("api/auth/login", async (
             LoginRequest request,
             IMediator mediator,
             IOptions<AuthConfiguration> jwtOptions) =>
@@ -29,7 +29,7 @@ public static class AuthEndpoints
             );
         });
 
-        app.MapPost("register", async (
+        app.MapPost("api/auth/register", async (
             RegisterRequest request,
             IMediator mediator) =>
         {
@@ -41,7 +41,7 @@ public static class AuthEndpoints
             );
         });
 
-        app.MapPost("update-password", async (
+        app.MapPost("api/auth/update-password", async (
             UpdatePasswordRequest request,
             IMediator mediator) =>
         {

@@ -9,12 +9,12 @@ public class Deal : IAggregate, IStoreCode, IAuditableEntity
     #endregion
 
     public int Id { get; set; }
-    public required Guid? StoreCode { get; set; }
+    public Guid StoreCode { get; set; }
     public required DealStatus Status { get; set; }
     public required DateTimeOffset DeliveryDate { get; set; }
     public ICollection<DealProduct> Products { get; set; } = [];
-    public required DateTimeOffset CreatedAt { get; set; }
-    public required Guid CreatedBy { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public Guid CreatedBy { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public Guid? UpdatedBy { get; set; }
     public string? Notes { get; set; }

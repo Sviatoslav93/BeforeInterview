@@ -3,7 +3,6 @@ using MediatR;
 using SingleDataBase.Database;
 using SingleDataBase.Exceptios;
 using SingleDataBase.Services.Abstractions;
-using Unit = LanguageExt.Unit;
 
 namespace SingleDataBase.Features.Auth.UpdatePassword;
 
@@ -11,8 +10,7 @@ public class UpdatePasswordHandler(StoreDbContext context, ICurrentUserProvider 
 {
     public async Task<Result<Unit>> Handle(UpdatePasswordRequest request, CancellationToken cancellationToken)
     {
-        var currentUserId = currentUserProvider.GetUserId();
-        var user = await context.Users.FindAsync([currentUserId], cancellationToken: cancellationToken);
+        var user = await context.Users.FindAsync([currentUserProvider.UserId], cancellationToken: cancellationToken);
         if (user == null)
         {
             return new Result<Unit>(new NotFoundException("User not found"));

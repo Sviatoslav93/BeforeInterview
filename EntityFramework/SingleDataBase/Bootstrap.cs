@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SingleDataBase.Configuration;
 using SingleDataBase.Database;
+using SingleDataBase.Database.Interceptors;
 
 namespace SingleDataBase;
 
@@ -64,10 +65,18 @@ public static class Bootstrap
 
     public static WebApplicationBuilder AddDbContext(this WebApplicationBuilder builder)
     {
-        builder.Services.AddDbContext<StoreDbContext>(options =>
-            options.UseSqlServer(
+        builder.Services.AddScoped<AuditableInterceptor>();
+        builder.Services.AddScoped<StoreCodeInterseptor>();
+
+        builder.Services.AddDbContext<StoreDbContext>((provider, options) =>
+            {
+                options.UseSqlServer(
                 builder.Configuration.GetConnectionString("StoreDbConnection"),
-                b => b.MigrationsAssembly(typeof(StoreDbContext).Assembly.FullName)));
+                b => b.MigrationsAssembly(typeof(StoreDbContext).Assembly.FullName))
+                .AddInterceptors(
+                    provider.GetRequiredService<StoreCodeInterseptor>(),
+                    provider.GetRequiredService<AuditableInterceptor>());
+            });
 
         return builder;
     }

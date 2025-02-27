@@ -6,7 +6,10 @@ public class StoreCodeProvider(IHttpContextAccessor httpContextAccessor) : IStor
 {
     private const string StoreCodeHeader = "X-StoreCode";
 
-    public Guid GetCurrentStoreCode()
+    private Guid? _storeCode = null;
+    public Guid StoreCode => _storeCode ??= GetCurrentStoreCode();
+
+    private Guid GetCurrentStoreCode()
     {
         var storeCode = httpContextAccessor.HttpContext?.Request.Headers[StoreCodeHeader];
 

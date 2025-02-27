@@ -12,9 +12,8 @@ public class Product : IAggregate, IStoreCode
     #endregion
 
     public int Id { get; set; }
-    public required Guid? StoreCode { get; set; }
-    public int DealId { get; set; }
-    public string Name { get; set; } = null!;
+    public Guid StoreCode { get; set; }
+    public required string Name { get; set; }
     public string? ImageUrl { get; set; }
     public string? Description { get; set; }
     public decimal Price { get; set; }

@@ -2,5 +2,5 @@ namespace SingleDataBase.Entities.Abstractions;
 
 public interface IStoreCode
 {
-    Guid? StoreCode { get; set; }
+    Guid StoreCode { get; set; }
 }

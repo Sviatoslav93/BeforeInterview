@@ -14,6 +14,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="9.2.0-preview.1.25105.6" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUi" Version="7.2.0" />
   </ItemGroup>

@@ -16,7 +16,7 @@ public class CreateStoreHandler(StoreDbContext context, ICurrentUserProvider cur
             StoreCode = Guid.NewGuid(),
             Name = request.Name,
             WebsiteUri = request.WebsiteUri,
-            UserId = currentUserProvider.GetUserId()
+            UserId = currentUserProvider.UserId
         };
 
         var storeEntry = _context.Stores.Add(store);
