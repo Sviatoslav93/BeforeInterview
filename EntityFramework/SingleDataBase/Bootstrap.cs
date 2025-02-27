@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using SingleDataBase.Configuration;
 using SingleDataBase.Database;
 using SingleDataBase.Database.Interceptors;
+using SingleDataBase.Swagger;
 
 namespace SingleDataBase;
 
@@ -43,6 +44,9 @@ public static class Bootstrap
                     new string[] { }
                 }
             });
+
+            // Add StoreCodeHeaderParameter to all operations
+            c.OperationFilter<StoreCodeHeaderParameter>();
         });
 
         return builder;

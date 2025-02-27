@@ -9,7 +9,11 @@ public static class StoresEndpoints
 {
     public static void MapStoreEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/stores").RequireAuthorization();
+        var group = app.MapGroup("api/stores")
+            .WithTags("Stores")
+            .WithOpenApi();
+
+        group.RequireAuthorization();
 
         group.MapPost("", async (CreateStoreRequest request, IMediator mediator) =>
         {

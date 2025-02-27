@@ -34,7 +34,6 @@ builder.Services.AddHybridCache(options =>
 });
 #pragma warning restore EXTEXP0018
 
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
