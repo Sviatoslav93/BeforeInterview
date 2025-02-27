@@ -17,7 +17,7 @@ public static class EndpointConventionBuilderExtensions
         return builder;
     }
 
-    public class StoreCodeMetadata
-    {
-    }
+}
+public class StoreCodeMetadata
+{
 }
