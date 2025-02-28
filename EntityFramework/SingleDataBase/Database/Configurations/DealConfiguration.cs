@@ -17,7 +17,7 @@ public class DealConfiguration : IEntityTypeConfiguration<Deal>
 
         builder.HasOne<Store>()
             .WithMany()
-            .HasForeignKey(x => x.StoreCode)
+            .HasForeignKey(x => x.StoreId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
 

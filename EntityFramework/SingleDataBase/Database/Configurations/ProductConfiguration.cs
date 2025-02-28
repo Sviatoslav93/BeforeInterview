@@ -12,7 +12,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasKey(x => x.Id);
 
-        builder.HasIndex(x => new { x.StoreCode, x.Name })
+        builder.HasIndex(x => new { x.StoreId, x.Name })
             .IsUnique();
 
         builder.Property(x => x.Price)
@@ -34,7 +34,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasOne<Store>()
             .WithMany()
-            .HasForeignKey(x => x.StoreCode)
+            .HasForeignKey(x => x.StoreId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
     }

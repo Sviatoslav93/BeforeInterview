@@ -13,7 +13,7 @@ public class CreateStoreHandler(StoreDbContext context, ICurrentUserProvider cur
     {
         var store = new Store
         {
-            StoreCode = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             Name = request.Name,
             WebsiteUri = request.WebsiteUri,
             UserId = currentUserProvider.UserId
@@ -22,6 +22,6 @@ public class CreateStoreHandler(StoreDbContext context, ICurrentUserProvider cur
         var storeEntry = _context.Stores.Add(store);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return storeEntry.Entity.StoreCode;
+        return storeEntry.Entity.Id;
     }
 }

@@ -2,14 +2,13 @@ using SingleDataBase.Entities.Abstractions;
 
 namespace SingleDataBase.Entities;
 
-public class Deal : IAggregate, IStoreCode, IAuditableEntity
+public class Deal : Entity<int>, IAggregate, IStoreId, IAuditableEntity
 {
     #region Constants
     public const int NotesMaxLength = 256;
     #endregion
 
-    public int Id { get; set; }
-    public Guid StoreCode { get; set; }
+    public Guid StoreId { get; set; }
     public required DealStatus Status { get; set; }
     public required DateTimeOffset DeliveryDate { get; set; }
     public ICollection<DealProduct> Products { get; set; } = [];

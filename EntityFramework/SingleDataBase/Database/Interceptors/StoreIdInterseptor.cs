@@ -5,7 +5,7 @@ using SingleDataBase.Services.Abstractions;
 
 namespace SingleDataBase.Database.Interceptors;
 
-public class StoreCodeInterseptor(IStoreCodeProvider storeCodeProvider) : SaveChangesInterceptor
+public class StoreIdInterseptor(IStoreIdProvider storeIdProvider) : SaveChangesInterceptor
 {
     public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
@@ -13,13 +13,13 @@ public class StoreCodeInterseptor(IStoreCodeProvider storeCodeProvider) : SaveCh
         CancellationToken cancellationToken = default)
     {
         var context = eventData.Context!;
-        var entries = context.ChangeTracker.Entries<IStoreCode>();
+        var entries = context.ChangeTracker.Entries<IStoreId>();
 
         foreach (var entry in entries)
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.StoreCode = storeCodeProvider.StoreCode;
+                entry.Entity.StoreId = storeIdProvider.StoreId;
             }
         }
 

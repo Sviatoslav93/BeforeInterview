@@ -2,16 +2,16 @@ namespace SingleDataBase.Extensions;
 
 public static class EndpointConventionBuilderExtensions
 {
-    public static TBuilder WithStoreCode<TBuilder>(this TBuilder builder) where TBuilder : IEndpointConventionBuilder
+    public static TBuilder WithStoreId<TBuilder>(this TBuilder builder) where TBuilder : IEndpointConventionBuilder
     {
         builder.Add(endpointBuilder =>
         {
-            endpointBuilder.Metadata.Add(new StoreCodeMetadata());
+            endpointBuilder.Metadata.Add(new StoreIdMetadata());
         });
         return builder;
     }
 }
 
-public class StoreCodeMetadata
+public class StoreIdMetadata
 {
 }

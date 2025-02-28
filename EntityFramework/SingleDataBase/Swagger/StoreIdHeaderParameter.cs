@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SingleDataBase.Swagger
 {
-    public class StoreCodeHeaderParameter : IOperationFilter
+    public class StoreIdHeaderParameter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
@@ -18,14 +18,14 @@ namespace SingleDataBase.Swagger
                 return;
             }
 
-            if (operation.Parameters.Any(p => p.Name == "X-StoreCode"))
+            if (operation.Parameters.Any(p => p.Name == "X-StoreId"))
             {
                 return;
             }
 
             operation.Parameters.Add(new OpenApiParameter
             {
-                Name = "X-StoreCode",
+                Name = "X-StoreId",
                 In = ParameterLocation.Header,
                 Schema = new OpenApiSchema
                 {

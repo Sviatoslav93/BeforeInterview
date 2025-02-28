@@ -2,11 +2,11 @@
 
 ### Get stores
 GET {{SingleDataBase_HostAddress}}/api/stores?pageNumber=1&pageSize=10
-X-StoreCode: happyPets
+X-StoreId: happyPets
 
 ### Get store info
 GET {{SingleDataBase_HostAddress}}/api/stores/2
-X-StoreCode: happyPets2
+X-StoreId: happyPets2
 
 ###
 POST {{SingleDataBase_HostAddress}}/api/stores

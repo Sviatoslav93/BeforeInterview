@@ -6,7 +6,7 @@ public class DealView
 {
 
     public int Id { get; set; }
-    public Guid? StoreCode { get; set; }
+    public Guid? StoreId { get; set; }
     public DealStatus Status { get; set; }
     public DateTimeOffset DeliveryDate { get; set; }
     public DateTimeOffset CreatedAt { get; set; }

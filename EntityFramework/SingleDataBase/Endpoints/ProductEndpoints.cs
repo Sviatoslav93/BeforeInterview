@@ -15,7 +15,7 @@ public static class ProductEndpoints
             .WithTags("Products")
             .WithOpenApi();
 
-        group.WithStoreCode();
+        group.WithStoreId();
         group.RequireAuthorization();
 
         group.MapGet("", async (

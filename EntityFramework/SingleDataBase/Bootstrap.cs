@@ -45,8 +45,7 @@ public static class Bootstrap
                 }
             });
 
-            // Add StoreCodeHeaderParameter to all operations
-            c.OperationFilter<StoreCodeHeaderParameter>();
+            c.OperationFilter<StoreIdHeaderParameter>();
         });
 
         return builder;
@@ -70,7 +69,7 @@ public static class Bootstrap
     public static WebApplicationBuilder AddDbContext(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<AuditableInterceptor>();
-        builder.Services.AddScoped<StoreCodeInterseptor>();
+        builder.Services.AddScoped<StoreIdInterseptor>();
 
         builder.Services.AddDbContext<StoreDbContext>((provider, options) =>
             {
@@ -78,7 +77,7 @@ public static class Bootstrap
                 builder.Configuration.GetConnectionString("StoreDbConnection"),
                 b => b.MigrationsAssembly(typeof(StoreDbContext).Assembly.FullName))
                 .AddInterceptors(
-                    provider.GetRequiredService<StoreCodeInterseptor>(),
+                    provider.GetRequiredService<StoreIdInterseptor>(),
                     provider.GetRequiredService<AuditableInterceptor>());
             });
 

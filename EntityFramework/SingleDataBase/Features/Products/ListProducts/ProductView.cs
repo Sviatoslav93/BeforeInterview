@@ -4,7 +4,7 @@ namespace SingleDataBase.Features.Products.ListProducts;
 
 public class ProductView
 {
-    public Guid StoreCode { get; set; }
+    public Guid StoreId { get; set; }
     public required string Name { get; set; }
     public string? ImageUrl { get; set; }
     public string? Description { get; set; }

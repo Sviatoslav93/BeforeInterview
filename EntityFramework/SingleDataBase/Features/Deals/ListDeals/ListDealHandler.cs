@@ -17,7 +17,7 @@ public class ListDealHandler(StoreDbContext db) : IRequestHandler<ListDealsReque
             .Select(d => new DealView()
             {
                 Id = d.Id,
-                StoreCode = d.StoreCode,
+                StoreId = d.StoreId,
                 Status = d.Status,
                 DeliveryDate = d.DeliveryDate,
                 CreatedAt = d.CreatedAt,

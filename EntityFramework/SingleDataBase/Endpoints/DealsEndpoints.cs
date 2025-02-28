@@ -16,7 +16,7 @@ public static class DealsEndpoints
             .WithTags("Deals") // Add a tag for grouping in Swagger UI
             .WithOpenApi();
 
-        group.WithStoreCode();
+        group.WithStoreId();
         group.RequireAuthorization();
 
         group.MapGet("", async (

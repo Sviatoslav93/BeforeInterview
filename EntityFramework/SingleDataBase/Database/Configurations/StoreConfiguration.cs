@@ -9,7 +9,7 @@ public class StoreConfiguration : IEntityTypeConfiguration<Store>
     {
         builder.ToTable("Stores");
 
-        builder.HasKey(x => x.StoreCode);
+        builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Name)
             .IsRequired()

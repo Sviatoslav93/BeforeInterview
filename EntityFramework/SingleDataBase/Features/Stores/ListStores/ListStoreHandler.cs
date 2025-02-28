@@ -11,7 +11,7 @@ public class ListStoreHandler(StoreDbContext context) : IRequestHandler<ListStor
         return context.Stores
             .Select(s => new StoreView
             {
-                StoreCode = s.StoreCode,
+                Id = s.Id,
                 Name = s.Name,
                 WebsiteUri = s.WebsiteUri
             })

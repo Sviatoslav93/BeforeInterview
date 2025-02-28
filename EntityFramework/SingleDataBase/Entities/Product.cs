@@ -2,7 +2,7 @@ using SingleDataBase.Entities.Abstractions;
 
 namespace SingleDataBase.Entities;
 
-public class Product : IAggregate, IStoreCode
+public class Product : Entity<int>, IAggregate, IStoreId
 {
 
     #region Constants
@@ -11,8 +11,7 @@ public class Product : IAggregate, IStoreCode
 
     #endregion
 
-    public int Id { get; set; }
-    public Guid StoreCode { get; set; }
+    public Guid StoreId { get; set; }
     public required string Name { get; set; }
     public string? ImageUrl { get; set; }
     public string? Description { get; set; }

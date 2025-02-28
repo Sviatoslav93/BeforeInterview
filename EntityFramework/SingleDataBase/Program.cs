@@ -20,7 +20,7 @@ builder
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-builder.Services.AddScoped<IStoreCodeProvider, StoreCodeProvider>();
+builder.Services.AddScoped<IStoreIdProvider, StoreIdProvider>();
 builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
 #pragma warning disable EXTEXP0018
@@ -45,7 +45,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<CheckStoreCodeMiddleware>();
+app.UseMiddleware<CheckIdCodeMiddleware>();
 
 app.MapStoreEndpoints();
 app.MapLoginEndpoints();

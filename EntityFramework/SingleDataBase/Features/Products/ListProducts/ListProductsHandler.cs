@@ -21,7 +21,7 @@ public class ListProductsHandler : IRequestHandler<ListProductsRequest, List<Pro
             .Take(request.PageSize)
             .Select(p => new ProductView()
             {
-                StoreCode = p.StoreCode,
+                StoreId = p.StoreId,
                 Name = p.Name,
                 ImageUrl = p.ImageUrl,
                 Description = p.Description,
