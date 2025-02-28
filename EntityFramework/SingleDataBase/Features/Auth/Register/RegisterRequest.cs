@@ -1,5 +1,5 @@
-using LanguageExt.Common;
 using MediatR;
+using Result;
 
 namespace SingleDataBase.Features.Auth.Register;
 

@@ -1,20 +1,39 @@
+using Result;
 using SingleDataBase.Entities.Abstractions;
 
 namespace SingleDataBase.Entities;
 
-public class Deal : Entity<int>, IAggregate, IStoreId, IAuditableEntity
+public class Deal : AuditableEntity<int>, IAggregate, IStoreId
 {
-    #region Constants
+
+#pragma warning disable CS8618 // Ef Core constructor
+    private Deal()
+    {
+    }
+#pragma warning restore CS8618
+
+
+    private Deal(
+        DateTimeOffset deliveryDate,
+        string? notes = null)
+    {
+        Status = DealStatus.Pending;
+        DeliveryDate = deliveryDate;
+        Notes = notes;
+    }
+
     public const int NotesMaxLength = 256;
-    #endregion
 
     public Guid StoreId { get; set; }
-    public required DealStatus Status { get; set; }
-    public required DateTimeOffset DeliveryDate { get; set; }
-    public ICollection<DealProduct> Products { get; set; } = [];
-    public DateTimeOffset CreatedAt { get; set; }
-    public Guid CreatedBy { get; set; }
-    public DateTimeOffset? UpdatedAt { get; set; }
-    public Guid? UpdatedBy { get; set; }
-    public string? Notes { get; set; }
+    public string? Notes { get; private set; }
+    public DealStatus Status { get; private set; }
+    public DateTimeOffset DeliveryDate { get; private set; }
+    public ICollection<DealProduct> Products { get; private set; } = [];
+
+    public static Result<Deal> Create(
+        DateTimeOffset deliveryDate,
+        string? notes = null)
+    {
+        return new Deal(deliveryDate, notes);
+    }
 }

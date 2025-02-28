@@ -1,1 +1,1 @@
-global using Unit = LanguageExt.Unit;
+global using Unit = Result.Nothing;

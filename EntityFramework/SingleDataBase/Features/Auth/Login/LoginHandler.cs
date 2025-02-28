@@ -1,6 +1,6 @@
-using LanguageExt.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Result;
 using SingleDataBase.Database;
 using SingleDataBase.Exceptios;
 
@@ -15,10 +15,10 @@ public class LoginHandler(StoreDbContext db) : IRequestHandler<LoginRequest, Res
         var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
         if (user == null)
         {
-            return new Result<LoginView>(new EmailPasswordMismatchException());
+            return new Error("incorrect credentials");
         }
 
-        if (string.Equals(user.Password, HashPassword(request.Password), StringComparison.Ordinal))
+        if (user.VerifyPassword(request.Password))
         {
             return new LoginView
             {
@@ -27,11 +27,6 @@ public class LoginHandler(StoreDbContext db) : IRequestHandler<LoginRequest, Res
             };
         }
 
-        return new Result<LoginView>(new EmailPasswordMismatchException());
-    }
-
-    private static string HashPassword(string password)
-    {
-        return password;
+        return new Error("incorrect credentials");
     }
 }

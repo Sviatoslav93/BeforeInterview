@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Result.Extensions;
 using SingleDataBase.Extensions;
-using SingleDataBase.Features.Products.CreateProduct;
-using SingleDataBase.Features.Products.ListProducts;
-using Microsoft.AspNetCore.Http;
+using SingleDataBase.Features.Products.Create;
+using SingleDataBase.Features.Products.GetInfo;
+using SingleDataBase.Features.Products.List;
 
 namespace SingleDataBase.Endpoints;
 
@@ -18,35 +19,52 @@ public static class ProductEndpoints
         group.WithStoreId();
         group.RequireAuthorization();
 
-        group.MapGet("", async (
+        // GET /api/products endpoint
+        group.MapGet("", (
             [AsParameters] ListProductsRequest request,
             IMediator mediator) =>
-        {
-            var getProductsResult = await mediator.Send(request);
+                mediator.Send(request)
+                    .MatchAsync(
+                        products => Results.Ok(products),
+                        err => Results.Problem(err.First().Message, statusCode: StatusCodes.Status400BadRequest)
+                    )
+            )
+            .WithName("GetProducts")
+            .WithDescription("Retrieves all products for the current store")
+            .Produces<IEnumerable<ListProductView>>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
-            return Results.Ok(getProductsResult);
-        })
-        .WithName("GetProducts")
-        .WithDescription("Retrieves all products for the current store")
-        .Produces<IEnumerable<ProductView>>(StatusCodes.Status200OK)
-        .ProducesProblem(StatusCodes.Status401Unauthorized)
-        .ProducesProblem(StatusCodes.Status400BadRequest);
+        // GET /api/products/{id} endpoint
+        group.MapGet("{id}", (
+            int id,
+            IMediator mediator) =>
+                mediator.Send(new GetProductRequest { Id = id })
+                    .MatchAsync(
+                        product => Results.Ok(product),
+                        err => Results.Problem(err.First().Message, statusCode: StatusCodes.Status400BadRequest)
+                    )
+            )
+            .WithName("GetProduct")
+            .WithDescription("Retrieves a product by its ID")
+            .Produces<GetProductView>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
-        group.MapPost("", async (
+        // POST /api/products endpoint
+        group.MapPost("", (
             [FromBody] CreateProductRequest request,
             IMediator mediator) =>
-        {
-            var createProductResult = await mediator.Send(request);
-
-            return createProductResult.Match(
-                id => Results.Created($"/api/products/{id}", id),
-                ex => Results.BadRequest(ex.Message)
-            );
-        })
-        .WithName("CreateProduct")
-        .WithDescription("Creates a new product for the current store")
-        .Produces<int>(StatusCodes.Status201Created)
-        .ProducesProblem(StatusCodes.Status401Unauthorized)
-        .ProducesProblem(StatusCodes.Status400BadRequest);
+                mediator.Send(request)
+                    .MatchAsync(
+                        id => Results.Created($"/api/products/{id}", id),
+                        err => Results.Problem(err.First().Message, statusCode: StatusCodes.Status400BadRequest)
+                    )
+            )
+            .WithName("CreateProduct")
+            .WithDescription("Creates a new product for the current store")
+            .Produces<int>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

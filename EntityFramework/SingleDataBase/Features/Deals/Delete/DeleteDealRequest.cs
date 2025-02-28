@@ -1,7 +1,7 @@
-using LanguageExt.Common;
 using MediatR;
+using Result;
 
-namespace SingleDataBase.Features.Deals.DeleteDeal;
+namespace SingleDataBase.Features.Deals.Delete;
 
 public class DeleteDealRequest : IRequest<Result<Unit>>
 {

@@ -1,10 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SingleDataBase.Extensions;
-using SingleDataBase.Features.Deals.CreateDeal;
-using SingleDataBase.Features.Deals.ListDeals;
-using Microsoft.AspNetCore.Http;
-using System.Net;
+using Result.Extensions;
+using SingleDataBase.Features.Deals.List;
+using SingleDataBase.Features.Deals.Create;
+using SingleDataBase.Features.Deals.Delete;
 
 namespace SingleDataBase.Endpoints;
 
@@ -19,30 +19,49 @@ public static class DealsEndpoints
         group.WithStoreId();
         group.RequireAuthorization();
 
-        group.MapGet("", async (
+        // GET /api/deals endpoint
+        group.MapGet("", (
             [AsParameters] ListDealsRequest listDealsRequest,
             IMediator mediator) =>
-        {
-            var deals = await mediator.Send(listDealsRequest);
-            return Results.Ok(deals);
-        })
-        .WithName("GetDeals")
-        .WithDescription("Retrieves all deals for the current store")
-        .Produces<IEnumerable<DealView>>(StatusCodes.Status200OK)
-        .ProducesProblem(StatusCodes.Status401Unauthorized)
-        .ProducesProblem(StatusCodes.Status400BadRequest);
+                mediator.Send(listDealsRequest)
+                    .MatchAsync(
+                        deal => Results.Ok(deal),
+                        err => Results.Problem(err.First().Message, statusCode: StatusCodes.Status400BadRequest))
+            )
+            .WithName("GetDeals")
+            .WithDescription("Retrieves all deals for the current store")
+            .Produces<IEnumerable<DealView>>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
-        group.MapPost("", async (
+        // POST /api/deals endpoint
+        group.MapPost("", (
             [FromBody] CreateDealRequest request,
             IMediator mediator) =>
-        {
-            var id = await mediator.Send(request);
-            return Results.Created($"/api/deals/{id}", id);
-        })
-        .WithName("CreateDeal")
-        .WithDescription("Creates a new deal for the current store")
-        .Produces<int>(StatusCodes.Status201Created)
-        .ProducesProblem(StatusCodes.Status401Unauthorized)
-        .ProducesProblem(StatusCodes.Status400BadRequest);
+                mediator.Send(request)
+                    .MatchAsync(
+                        id => Results.Created($"/api/deals/{id}", id),
+                        err => Results.Problem(err.First().Message, statusCode: StatusCodes.Status400BadRequest))
+            )
+            .WithName("CreateDeal")
+            .WithDescription("Creates a new deal for the current store")
+            .Produces<int>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        // DELETE /api/deals/{id} endpoint
+        group.MapDelete("{id}", (
+            int id,
+            IMediator mediator) =>
+                mediator.Send(new DeleteDealRequest { Id = id })
+                    .MatchAsync(
+                        _ => Results.NoContent(),
+                        err => Results.Problem(err.First().Message, statusCode: StatusCodes.Status400BadRequest))
+            )
+            .WithName("DeleteDeal")
+            .WithDescription("Deletes a deal by ID")
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

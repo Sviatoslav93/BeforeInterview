@@ -4,6 +4,7 @@ using System.Text;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Result.Extensions;
 using SingleDataBase.Configuration;
 using SingleDataBase.Features.Auth.Login;
 using SingleDataBase.Features.Auth.Register;
@@ -16,42 +17,36 @@ public static class AuthEndpoints
 
     public static void MapLoginEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("api/auth/login", async (
+        // POST api/auth/login
+        app.MapPost("api/auth/login", (
             LoginRequest request,
             IMediator mediator,
             IOptions<AuthConfiguration> jwtOptions) =>
-        {
-            var loginResult = await mediator.Send(request);
+                mediator.Send(request)
+                    .MatchAsync(
+                        user => Results.Ok(new { Token = GenerateJwtToken(user, jwtOptions.Value) }),
+                        err => Results.BadRequest(err.First().Message)
+                    ));
 
-            return loginResult.Match(
-                user => Results.Ok(new { Token = GenerateJwtToken(user, jwtOptions.Value) }),
-                ex => Results.BadRequest(ex.Message)
-            );
-        });
-
-        app.MapPost("api/auth/register", async (
+        // POST api/auth/register
+        app.MapPost("api/auth/register", (
             RegisterRequest request,
             IMediator mediator) =>
-        {
-            var registerResult = await mediator.Send(request);
+                mediator.Send(request)
+                    .MatchAsync(
+                        id => Results.Ok(id),
+                        err => Results.BadRequest(err.First().Message)
+                    ));
 
-            return registerResult.Match(
-                id => Results.Ok(id),
-                ex => Results.BadRequest(ex.Message)
-            );
-        });
-
-        app.MapPost("api/auth/update-password", async (
+        // POST api/auth/update-password
+        app.MapPost("api/auth/update-password", (
             UpdatePasswordRequest request,
             IMediator mediator) =>
-        {
-            var updatePasswordResult = await mediator.Send(request);
-
-            return updatePasswordResult.Match(
-                _ => Results.Ok(),
-                ex => Results.BadRequest(ex.Message)
-            );
-        });
+                mediator.Send(request)
+                    .MatchAsync(
+                        _ => Results.Ok(),
+                        err => Results.BadRequest(err.First().Message)
+                    ));
     }
 
     private static string GenerateJwtToken(LoginView user, AuthConfiguration auth)

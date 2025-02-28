@@ -1,14 +1,13 @@
-using LanguageExt.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Result;
+using Result.Extensions;
 using SingleDataBase.Database;
 using SingleDataBase.Entities;
-using SingleDataBase.Exceptios;
 
 namespace SingleDataBase.Features.Auth.Register;
 
-public class RegisterHandler(
-    StoreDbContext db) : IRequestHandler<RegisterRequest, Result<Guid>>
+public class RegisterHandler(StoreDbContext db) : IRequestHandler<RegisterRequest, Result<Guid>>
 {
     private readonly StoreDbContext _db = db;
 
@@ -18,24 +17,21 @@ public class RegisterHandler(
 
         if (existUser is not null)
         {
-            return new Result<Guid>(new AppException("user-already-exist", "User already exists"));
+            return new Error("user already exists");
         }
 
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
+        return await User.Create(
+            email: request.Email,
+            password: request.Password,
+            firstName: request.FirstName,
+            lastName: request.LastName,
+            dateOfBirth: request.DateOfBirth)
+                .ThenAsync(async user =>
+                {
+                    var entry = await _db.Users.AddAsync(user, cancellationToken);
+                    await _db.SaveChangesAsync(cancellationToken);
 
-            Email = request.Email,
-            Password = request.Password,
-
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            DateOfBirth = request.DateOfBirth,
-        };
-
-        var entry = await _db.Users.AddAsync(user, cancellationToken);
-        await _db.SaveChangesAsync(cancellationToken);
-
-        return entry.Entity.Id;
+                    return entry.Entity.Id;
+                });
     }
 }

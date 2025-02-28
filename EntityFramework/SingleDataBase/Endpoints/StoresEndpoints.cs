@@ -1,5 +1,6 @@
 using MediatR;
-using SingleDataBase.Features.Stores.CreateStore;
+using Result.Extensions;
+using SingleDataBase.Features.Stores.Create;
 using SingleDataBase.Features.Stores.ListStores;
 using SingleDataBase.Services.Abstractions;
 
@@ -15,16 +16,36 @@ public static class StoresEndpoints
 
         group.RequireAuthorization();
 
-        group.MapPost("", async (CreateStoreRequest request, IMediator mediator) =>
-        {
-            var id = await mediator.Send(request);
-            return Results.Ok(id);
-        });
+        // POST /api/stores endpoint
+        group.MapPost("", (
+            CreateStoreRequest request,
+            IMediator mediator) =>
+                mediator.Send(request)
+                    .MatchAsync(
+                        id => Results.Created($"/api/stores/{id}", id),
+                        err => Results.Problem(err.First().Message, statusCode: StatusCodes.Status400BadRequest)
+                    )
+            )
+            .WithName("CreateStore")
+            .WithDescription("Creates a new store for the current user")
+            .Produces<int>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
-        group.MapGet("", async (IMediator mediator, ICurrentUserProvider currentUserProvider) =>
-        {
-            var stores = await mediator.Send(new ListStoresRequest { UserId = currentUserProvider.UserId });
-            return Results.Ok(stores);
-        });
+        // GET /api/stores endpoint
+        group.MapGet("", (
+            IMediator mediator,
+            ICurrentUserProvider currentUserProvider) =>
+                mediator.Send(new ListStoresRequest { UserId = currentUserProvider.UserId })
+                    .MatchAsync(
+                        stores => Results.Ok(stores),
+                        err => Results.Problem(err.First().Message, statusCode: StatusCodes.Status400BadRequest)
+                    )
+            )
+            .WithName("GetStores")
+            .WithDescription("Retrieves all stores for the current user")
+            .Produces<IEnumerable<StoreView>>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

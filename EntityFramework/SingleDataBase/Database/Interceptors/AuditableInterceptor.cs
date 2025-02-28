@@ -21,12 +21,11 @@ public class AuditableInterceptor(
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAt = timeProvider.GetUtcNow();
-                entry.Entity.CreatedBy = currentUserProvider.UserId;
+                entry.Entity.SetCreateInfo(timeProvider.GetUtcNow(), currentUserProvider.UserId);
             }
             else if (entry.State == EntityState.Modified)
             {
-                entry.Entity.UpdatedAt = DateTime.UtcNow;
+                entry.Entity.SetUpdateInfo(timeProvider.GetUtcNow(), currentUserProvider.UserId);
             }
         }
 
