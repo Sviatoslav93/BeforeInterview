@@ -1,0 +1,32 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Store.Entities;
+
+namespace Store.Database.Configurations;
+
+public class DealConfiguration : IEntityTypeConfiguration<Deal>
+{
+    public void Configure(EntityTypeBuilder<Deal> builder)
+    {
+        builder.ToTable("Deals");
+        builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Notes)
+            .IsRequired(false)
+            .HasMaxLength(Deal.NotesMaxLength);
+
+        builder.HasOne<Entities.Store>()
+            .WithMany()
+            .HasForeignKey(x => x.StoreId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.OwnsMany(x => x.Products, p =>
+        {
+            p.ToTable("DealProducts");
+            p.WithOwner().HasForeignKey("DealId");
+            p.Property(x => x.ProductId).IsRequired();
+            p.Property(x => x.Quantity).IsRequired();
+        });
+    }
+}
