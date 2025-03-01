@@ -1,4 +1,4 @@
-namespace HelloRabbitMq;
+namespace Sender;
 
 public class RabbitMqConfiguration
 {

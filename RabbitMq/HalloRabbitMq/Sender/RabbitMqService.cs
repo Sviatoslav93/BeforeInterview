@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace HelloRabbitMq;
+namespace Sender;
 
 public class RabbitMqService
 {
@@ -22,7 +22,7 @@ public class RabbitMqService
     {
         await using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
         await using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
-        
+
         // Declare the queue
         var queueName = _rabbitMqConfiguration.QueueName;
         await DeclareQueueAsync(channel, queueName, cancellationToken);
@@ -36,7 +36,7 @@ public class RabbitMqService
             body: messageBody,
             cancellationToken: cancellationToken
         );
-        
+
         _logger.LogInformation("Message sent successfully: {Message}", message);
     }
 

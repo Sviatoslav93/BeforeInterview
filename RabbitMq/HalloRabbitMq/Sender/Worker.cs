@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Hosting;
 
-namespace HelloRabbitMq;
+namespace Sender;
 
 internal class Worker(RabbitMqService rabbitMqService) : BackgroundService
 {
