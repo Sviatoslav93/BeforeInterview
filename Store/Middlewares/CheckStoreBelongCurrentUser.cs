@@ -6,7 +6,7 @@ using Store.Services.Abstractions;
 
 namespace Store.Middlewares;
 
-public class CheckIdCodeMiddleware(
+public class CheckStoreBelongCurrentUser(
     RequestDelegate next,
     HybridCache cache)
 {
